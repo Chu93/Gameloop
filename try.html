@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+		<script language="javascript" src="jquery.hotkeys.js" type="text/javascript"></script>
+		<script language="javascript" src="key_status.js" type="text/javascript"></script>
+		<script language="javascript" src="fpsmeter.js" type-"text/javascript"></script>
+
+	<script type="text/javascript">
+		//Sleep function
+		function sleep(timedifference) {
+			for( var t = new Date().getTime(); new Date().getTime() - t <= timedifference;);
+		}
+			
+		document.addEventListener("keydown", keydownEvent, false);	
+		document.addEventListener("keyup", keyupEvent, false);
+		
+		function keydownEvent(e)
+		{
+			if(!e)
+			e = event;
+		}
+	
+		function keyupEvent(e)
+		{
+			if(!e)
+			e=event;
+		}
+		
+		var maxFps = 60; //max fps we allow
+		
+		function updateFrameRate(newFrameRate) {
+			//maxFps = newFrameRate;  
+			document.getElementById("FrameRateLabel").innerHTML = maxFps;
+		}
+		
+
+		$(window).bind("load", function() {
+			
+			//Variables representing the canvas and the canvas' context (the context is used for actually drawing on the canvas)
+			var canvas = document.getElementById("canvas");
+			var context = canvas.getContext("2d");
+			
+			//load image which will be drawn on the canvas
+			//var img = document.getElementById("target").style.marginTop="30px";
+			//img.onload = function(){context.drawImage(img,10,10)}
+			var img = new Image();
+			img.src="funface.jpg";			
+			
+			//The ball that we will be drawing on the canvas
+			var ball = {x:canvas.width/2, //the x location of the ball
+								y:canvas.height, 
+						//y:canvas.height/2, //the y location of the ball
+						radius:10, //the radius of the ball
+						fillColor:"orange", //what color should the ball be
+						strokeColor:"grey", //what color should the outline of the ball be
+						velocity_x:1, //how fast the ball will move in the x direction
+						velocity_y:1}; //how fast the ball will move in the y direction
+			
+			//the original value doesn't matter at all.			
+			var fps=0;
+						
+			//Calculate frame time, when maxFps = 60 it's 16.7ms 
+				frametime = 1000/maxFps;
+			
+			//start us off the first time
+			requestAnimationFrame(mainLoop);
+			
+			//Call the fps meter
+			var meter = new FPSMeter({theme:'dark'});
+			
+			//Start Time Point
+			var previous = new Date().getTime();
+			var lag = 0;
+			
+			//Game Loop
+			function mainLoop() {
+			
+				var current = new Date().getTime();
+				var elapsed = current - previous;
+				//Update timing data
+				previous = current;
+				lag += elapsed;
+				
+				processInput();
+
+					
+
+				//Count time
+				var nextcurrent = new Date().getTime();
+				var timedifference = frametime - (nextcurrent - current) ; // supposed to be negative -> fps < maxFps
+									
+				if(timedifference > 0) {			//if real fps > 60
+					sleep(timedifference);
+					}
+				else
+				fps = 1000 / ( nextcurrent - current );  //Calculate FPS
+
+				//Display fps with fpsmeter
+				meter.tick();
+					
+				requestAnimationFrame(mainLoop);				
+						
+			}
+			
+			//Here is where we would read the user's input. We will fill this in later
+			function processInput() {
+				if(keydown.left)
+				{
+					ball.velocity_x -=1;
+				}
+				
+				if(keydown.right)
+				{
+					ball.velocity_x +=1;
+				}
+				
+				if(keydown.up)
+				{
+					ball.velocity_y-=1;
+				}
+				
+				if(keydown.down)
+				{
+					ball.velocity_y+=1;
+				}
+			}
+			
+			//Here is where we would update the state of our game or simulation (e.g., make the ball move). We will fill this in later.
+			function update() {
+				
+				ball.x = ball.x + ball.velocity_x;
+				ball.y = ball.y + ball.velocity_y;
+				
+				if( ball.x < 0 ){
+					ball.velocity_x = ball.velocity_x * -1;
+				}
+				
+				if( ball.x > canvas.width ){
+					ball.velocity_x *= -1;
+				}
+				
+				if ( ball.y < 0 ){
+					ball.velocity_y *= -1;
+				}
+				
+				if( ball.y > canvas.height ){
+					ball.velocity_y *= -1;
+				}
+			}
+			
+			//Draw the scene. Here we simply erase what was previously drawn (e.g., where the ball used to be), then draw it again
+			function draw() {
+				
+				//clear our drawing
+				context.clearRect(0, 0, canvas.width, canvas.height);	// (0,0) is the top left instead of the bottom left
+				
+				//draw the ball
+				context.beginPath();
+				context.arc(ball.x, ball.y, ball.radius, 0, 2 * Math.PI, false);
+				context.fillStyle = ball.fillColor;
+				context.fill();
+				context.lineWidth = 1;
+				context.strokeStyle = ball.strokeColor;
+				context.stroke();
+				//context.closePath();
+				
+				//draw the target image
+				context.drawImage(img,175,145);
+				
+				context.fillText("FPS: " + fps, 10, 10);
+			}
+		
+		});
+	</script>
+	
+	</head>
+	
+	<body>	
+	<div>
+		
+		<canvas id="canvas" width="640" 
+		height="540" style="border:1px solid #000;">
+		 Your browser does not support the canvas element.
+
+		 </canvas>
+	</div>
+	</body>
+	
+</html>
