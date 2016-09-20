@@ -91,24 +91,33 @@
 			
 			//Here is where we would read the user's input. We will fill this in later
 			function processInput() {
-				if(keydown.left)
-				{
-					ball.velocity_x -=1;
+				if (keydown.left) {
+					ball.velocity_x -= 1;
+					if (ball.x < 0) {
+						ball.x = 0;
+						if (ball.velocity_x < 0) ball.velocity_x -= 1;
+					}
 				}
-				
-				if(keydown.right)
-				{
-					ball.velocity_x +=1;
+				if (keydown.right) {
+					ball.velocity_x += 1;
+					if (ball.x > canvas.width) {
+						ball.x = canvas.width;
+						if (ball.velocity_x > 0) ball.velocity_x -= 1;
+					}
 				}
-				
-				if(keydown.up)
-				{
-					ball.velocity_y-=1;
+				if (keydown.up) {
+					ball.velocity_y -= 1;
+					if (ball.y < 0) {
+						ball.y = 0;
+						if (ball.velocity_y < 0) ball.velocity_y -= 1;
+					}
 				}
-				
-				if(keydown.down)
-				{
-					ball.velocity_y+=1;
+				if (keydown.down) {
+					ball.velocity_y += 1;
+					if (ball.y > canvas.height) {
+						ball.y = canvas.height;
+						if (ball.velocity_y > 0) ball.velocity_y -= 1;
+					}
 				}
 			}
 			
