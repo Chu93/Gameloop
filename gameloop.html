@@ -37,12 +37,14 @@
 			
 			//The ball that we will be drawing on the canvas
 			var ball = {x:canvas.width/2, //the x location of the ball
-								y:canvas.height, 
+								y:canvas.height, // the y location of the ball
+								last_x: canvas.width / 2, //save last x location of the ball for interplated rendering
+								last_y: canvas.height, // save last y location of the ball for interpolated
 								radius:10, //the radius of the ball
 								fillColor:"orange", //what color should the ball be
 								strokeColor:"grey", //what color should the outline of the ball be
-								velocity_x:1, //how fast the ball will move in the x direction
-								velocity_y:1}; //how fast the ball will move in the y direction
+								velocity_x:0.1, //how fast the ball will move in the x direction
+								velocity_y:-0.2}; //how fast the ball will move in the y direction
 			
 			//this original value doesn't matter at all.			
 			var fps=0;
@@ -60,27 +62,30 @@
 			//Be careful not to make it too short ---> Must be greater than update() time.
 			const MsPerUpdate = 12;
 			
+			
 			//Start Time Point
 			var previous = new Date().getTime();
-			var lag = 0;
+			var delta = 0; // delta
 			
 			//Game Loop
 			function mainLoop() {
-			
+				
+			////Fixed timestep -- block -- start
 				var current = new Date().getTime();
 				var elapsed = current - previous;
 				//Update timing data
 				previous = current;
-				lag += elapsed;
+				delta += elapsed;
 				
 				processInput();
 
-				while( lag >= MsPerUpdate ){
-					update();
-					lag -= MsPerUpdate;
+				while( delta >= MsPerUpdate ){
+					update(delta);
+					delta -= MsPerUpdate;
 				}
+			////Fixed timestep -- block -- end
 				
-				draw();
+				draw(delta / MsPerUpdate);
 
 				//Display fps with fpsmeter
 				meter.tick();
@@ -92,28 +97,28 @@
 			//Here is where we would read the user's input. We will fill this in later
 			function processInput() {
 				if (keydown.left) {
-					ball.velocity_x -= 1;
+					ball.velocity_x -= 0.02;
 					if (ball.x < 0) {
 						ball.x = 0;
 						if (ball.velocity_x < 0) ball.velocity_x -= 1;
 					}
 				}
 				if (keydown.right) {
-					ball.velocity_x += 1;
+					ball.velocity_x += 0.02;
 					if (ball.x > canvas.width) {
 						ball.x = canvas.width;
 						if (ball.velocity_x > 0) ball.velocity_x -= 1;
 					}
 				}
 				if (keydown.up) {
-					ball.velocity_y -= 1;
+					ball.velocity_y -= 0.02;
 					if (ball.y < 0) {
 						ball.y = 0;
 						if (ball.velocity_y < 0) ball.velocity_y -= 1;
 					}
 				}
 				if (keydown.down) {
-					ball.velocity_y += 1;
+					ball.velocity_y += 0.02;
 					if (ball.y > canvas.height) {
 						ball.y = canvas.height;
 						if (ball.velocity_y > 0) ball.velocity_y -= 1;
@@ -122,10 +127,12 @@
 			}
 			
 			//Here is where we would update the state of our game or simulation (e.g., make the ball move). We will fill this in later.
-			function update() {
+			function update(delta) {
+				ball.last_x = ball.x;
+				ball.last_y = ball.y;
 				
-				ball.x = ball.x + ball.velocity_x;
-				ball.y = ball.y + ball.velocity_y;
+				ball.x += ball.velocity_x * delta;
+				ball.y += ball.velocity_y * delta;
 				
 				if( ball.x < 0 ){
 					ball.velocity_x = ball.velocity_x * -1;
@@ -145,13 +152,15 @@
 			}
 			
 			//Draw the scene. Here we simply erase what was previously drawn (e.g., where the ball used to be), then draw it again
-			function draw() {
+			function draw(interp) {
 				
 				//clear our drawing
 				context.clearRect(0, 0, canvas.width, canvas.height);	// (0,0) is the top left instead of the bottom left
 				
 				//draw the ball
 				context.beginPath();
+				ball.x = ball.last_x + (ball.x - ball.last_x) * interp;
+				ball.y = ball.last_y + (ball.y - ball.last_y) * interp;
 				context.arc(ball.x, ball.y, ball.radius, 0, 2 * Math.PI, false);
 				context.fillStyle = ball.fillColor;
 				context.fill();
