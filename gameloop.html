@@ -7,10 +7,6 @@
 		<script language="javascript" src="fpsmeter.js" type-"text/javascript"></script>
 
 	<script type="text/javascript">
-		//Sleep function
-		function sleep(timedifference) {
-			for( var t = new Date().getTime(); new Date().getTime() - t <= timedifference;);
-		}
 			
 		document.addEventListener("keydown", keydownEvent, false);	
 		document.addEventListener("keyup", keyupEvent, false);
@@ -27,13 +23,7 @@
 			e=event;
 		}
 		
-		var maxFps = 60; //max fps we allow
-		
-		function updateFrameRate(newFrameRate) {
-			//maxFps = newFrameRate;  
-			document.getElementById("FrameRateLabel").innerHTML = maxFps;
-		}
-		
+		var TargetFPS = 60; //The FPS we want
 
 		$(window).bind("load", function() {
 			
@@ -42,32 +32,33 @@
 			var context = canvas.getContext("2d");
 			
 			//load image which will be drawn on the canvas
-			//var img = document.getElementById("target").style.marginTop="30px";
-			//img.onload = function(){context.drawImage(img,10,10)}
 			var img = new Image();
 			img.src="funface.jpg";			
 			
 			//The ball that we will be drawing on the canvas
 			var ball = {x:canvas.width/2, //the x location of the ball
 								y:canvas.height, 
-						//y:canvas.height/2, //the y location of the ball
-						radius:10, //the radius of the ball
-						fillColor:"orange", //what color should the ball be
-						strokeColor:"grey", //what color should the outline of the ball be
-						velocity_x:1, //how fast the ball will move in the x direction
-						velocity_y:1}; //how fast the ball will move in the y direction
+								radius:10, //the radius of the ball
+								fillColor:"orange", //what color should the ball be
+								strokeColor:"grey", //what color should the outline of the ball be
+								velocity_x:1, //how fast the ball will move in the x direction
+								velocity_y:1}; //how fast the ball will move in the y direction
 			
-			//the original value doesn't matter at all.			
+			//this original value doesn't matter at all.			
 			var fps=0;
 						
-			//Calculate frame time, when maxFps = 60 it's 16.7ms 
-				frametime = 1000/maxFps;
+			//Calculate frame time, when TargetFPS = 60 it's 16.7ms 
+			frametime = 1000/TargetFPS;
 			
 			//start us off the first time
 			requestAnimationFrame(mainLoop);
 			
 			//Call the fps meter
 			var meter = new FPSMeter({theme:'dark'});
+			
+			//Define a MsPerUpdate which faster than 60FPS <----> 16''67ms per frame
+			//Be careful not to make it too short ---> Must be greater than update() time.
+			const MsPerUpdate = 12;
 			
 			//Start Time Point
 			var previous = new Date().getTime();
@@ -83,18 +74,13 @@
 				lag += elapsed;
 				
 				processInput();
-				update();
-				draw();
+
+				while( lag >= MsPerUpdate ){
+					update();
+					lag -= MsPerUpdate;
+				}
 				
-				//Count time
-				var nextcurrent = new Date().getTime();
-				var timedifference = frametime - (nextcurrent - current) ; // supposed to be negative -> fps < maxFps
-									
-				if(timedifference > 0) {			//if real fps > 60
-					sleep(timedifference);
-					}
-				else
-				fps = 1000 / ( nextcurrent - current );  //Calculate FPS
+				draw();
 
 				//Display fps with fpsmeter
 				meter.tick();
