@@ -169,7 +169,7 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 				}
 				
 				//hit the face
-				if (ball.x > 330 && ball.x < 450 && ball.y > 160 && ball.y < 280) {
+				if (ball.x >= 330 && ball.x <= 450 && ball.y >= 160 && ball.y <= 280) {
 					changeFace();
 					playSound();
 					updateScore();
