@@ -6,6 +6,8 @@
 
 To run, simply open "gameloop_(Bryan)BoCao_ChuyiLiu.html" with Chrome.
 
+Note that Megaman 2 Wily Stage 1 2 background music is used. FpsMeter is used to display fps on the screen https://github.com/Darsain/fpsmeter.
+
 Assignment 2 Submission There was an error with the initial assignment 2 submission process, which necessitated creating a new submission form. Please submit your assignment 2 solutions here. The assignment 2 text is copied below for clarity:
 
 Assignment 2 is to work with a partner to implement a fixed-time step, variable rendering game loop. Feel free to extend the game loop with the bouncing ball that we have used in class, or make your own!
