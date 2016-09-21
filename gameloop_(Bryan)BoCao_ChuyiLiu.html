@@ -34,10 +34,14 @@
 			var canvas = document.getElementById("canvas");
 			var context = canvas.getContext("2d");
 			
-			//load image which will be drawn on the canvas
+			//Load image which will be drawn on the canvas
 			var imgFace = new Image();
 			imgFace.src = "funface.jpg";
 			var faceNum = 0;
+			
+			//Load audio
+			var audio = new Audio();
+			audio.src = "ouch.mp3";
 			
 			//The ball that we will be drawing on the canvas
 			var ball = {x:canvas.width/2, //the x location of the ball
@@ -156,6 +160,7 @@
 				//hit the face
 				if (ball.x > 330 && ball.x < 450 && ball.y > 240 && ball.y < 360) {
 					changeFace();
+					playSound();
 					if (ball.last_x <= 330 || ball.last_x >= 450) ball.velocity_x *= -1;
 					if (ball.last_y <= 240 || ball.last_y >= 360) ball.velocity_y *= -1;
 				}
@@ -178,6 +183,11 @@
 						faceNum = 0;
 						break;
 				}
+			}
+			
+			//Play sound
+			function playSound() {
+				audio.play();
 			}
 			
 			//Draw the scene. Here we simply erase what was previously drawn (e.g., where the ball used to be), then draw it again
