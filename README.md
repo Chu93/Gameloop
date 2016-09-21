@@ -6,7 +6,7 @@
 
 To run, simply open "gameloop_(Bryan)BoCao_ChuyiLiu.html" with Chrome.
 
-Note that Megaman 2 Wily Stage 1 2 background music is used. FpsMeter is used to display fps on the screen https://github.com/Darsain/fpsmeter.
+Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used to display fps on the screen https://github.com/Darsain/fpsmeter. jquery.hotkeys.js and key_status.js are from class.
 
 Assignment 2 Submission There was an error with the initial assignment 2 submission process, which necessitated creating a new submission form. Please submit your assignment 2 solutions here. The assignment 2 text is copied below for clarity:
 
