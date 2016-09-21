@@ -88,7 +88,6 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 			//Game Loop
 			function mainLoop() {
 				
-			////Fixed timestep -- block -- start
 				var current = new Date().getTime();
 				var elapsed = current - previous;
 				//Update timing data
@@ -101,10 +100,10 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 					update(delta);
 					delta -= timestep;
 				}
-			////Fixed timestep -- block -- end
 				
 				draw(delta / timestep);
-
+			
+			
 				//Display fps with fpsmeter
 				meter.tick();
 					
@@ -130,6 +129,7 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 			
 			//Here is where we would update the state of our game or simulation (e.g., make the ball move). We will fill this in later.
 			function update(delta) {
+				
 				ball.last_x = ball.x;
 				ball.last_y = ball.y;
 				
@@ -156,9 +156,7 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 					if (ball.velocity_y > 0) ball.velocity_y *= -1;
 				}
 				
-				
-				
-				//hit the face
+				//Hit the face to change face, make noise and update score
 				if (ball.x >= 330 && ball.x <= 450 && ball.y >= 160 && ball.y <= 280) {
 					changeFace();
 					playSound();
@@ -171,6 +169,7 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 			
 			//Change img face
 			function changeFace() {
+				
 				switch (faceNum) {
 					case 0:
 						imgFace.src = "img/cryface.png";
@@ -185,6 +184,7 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 						faceNum = 0;
 						break;
 				}
+				
 			}
 			
 			//Play sound
