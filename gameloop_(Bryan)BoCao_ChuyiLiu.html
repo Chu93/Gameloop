@@ -71,7 +71,7 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 			requestAnimationFrame(mainLoop);
 			
 			//Call the fps meter
-			var meter = new FPSMeter({theme:'dark'});
+			var meter = new FPSMeter({theme:'dark' , graph:1 , heat:1});
 			
 			//Define a MsPerUpdate which faster than 60FPS <----> 16''67ms per frame
 			//Be careful not to make it too short ---> Must be greater than update() time.
