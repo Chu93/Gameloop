@@ -63,7 +63,7 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 								fillColor:"orange", //what color should the ball be
 								strokeColor:"grey", //what color should the outline of the ball be
 								velocity_x:0.1, //how fast the ball will move in the x direction
-								velocity_y:-0.2}; //how fast the ball will move in the y direction
+								velocity_y:-0.14}; //how fast the ball will move in the y direction
 			
 			//this original value doesn't matter at all.			
 			var fps=0;
@@ -77,13 +77,13 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 			//Call the fps meter
 			var meter = new FPSMeter({theme:'dark' , graph:1 , heat:1});
 			
-			//Define a MsPerUpdate which faster than 60FPS <----> 16''67ms per frame
+			//Define a timestep which faster than 60FPS <----> 16''67ms per frame
 			//Be careful not to make it too short ---> Must be greater than update() time.
-			const MsPerUpdate = 12;
+			const timestep = frametime - 4 ; //faster than 1000 / 60 -> 16''67ms per frame
 			
 			//Start Time Point
 			var previous = new Date().getTime();
-			var delta = 0; // delta
+			var delta = 0;
 			
 			//Game Loop
 			function mainLoop() {
@@ -97,13 +97,13 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 				
 				processInput();
 
-				while( delta >= MsPerUpdate ){
+				while( delta >= timestep ){
 					update(delta);
-					delta -= MsPerUpdate;
+					delta -= timestep;
 				}
 			////Fixed timestep -- block -- end
 				
-				draw(delta / MsPerUpdate);
+				draw(delta / timestep);
 
 				//Display fps with fpsmeter
 				meter.tick();
@@ -115,32 +115,16 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 			//Here is where we would read the user's input. We will fill this in later
 			function processInput() {
 				if (keydown.left) {
-					ball.velocity_x -= 0.02;
-					if (ball.x < 0) {
-						ball.x = 0;
-						if (ball.velocity_x < 0) ball.velocity_x -= 1;
-					}
+					ball.velocity_x -= 0.01;
 				}
 				if (keydown.right) {
-					ball.velocity_x += 0.02;
-					if (ball.x > canvas.width) {
-						ball.x = canvas.width;
-						if (ball.velocity_x > 0) ball.velocity_x -= 1;
-					}
+					ball.velocity_x += 0.01;
 				}
 				if (keydown.up) {
-					ball.velocity_y -= 0.02;
-					if (ball.y < 0) {
-						ball.y = 0;
-						if (ball.velocity_y < 0) ball.velocity_y -= 1;
-					}
+					ball.velocity_y -= 0.01;
 				}
 				if (keydown.down) {
-					ball.velocity_y += 0.02;
-					if (ball.y > canvas.height) {
-						ball.y = canvas.height;
-						if (ball.velocity_y > 0) ball.velocity_y -= 1;
-					}
+					ball.velocity_y += 0.01;
 				}
 			}
 			
@@ -152,21 +136,27 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 				ball.x += ball.velocity_x * delta;
 				ball.y += ball.velocity_y * delta;
 				
-				if( ball.x < 0 ){
-					ball.velocity_x *= -1;
+				if (ball.x < 0) {
+					ball.x = 0;
+					if (ball.velocity_x < 0) ball.velocity_x *= -1;
 				}
 				
-				if( ball.x > canvas.width ){
-					ball.velocity_x *= -1;
+				if (ball.x > canvas.width) {
+					ball.x = canvas.width;
+					if (ball.velocity_x > 0) ball.velocity_x *= -1;
 				}
 				
-				if ( ball.y < 0 ){
-					ball.velocity_y *= -1;
+				if (ball.y < 0) {
+					ball.y = 0;
+					if (ball.velocity_y < 0) ball.velocity_y *= -1;
 				}
 				
-				if( ball.y > canvas.height ){
-					ball.velocity_y *= -1;
+				if (ball.y > canvas.height) {
+					ball.y = canvas.height;
+					if (ball.velocity_y > 0) ball.velocity_y *= -1;
 				}
+				
+				
 				
 				//hit the face
 				if (ball.x >= 330 && ball.x <= 450 && ball.y >= 160 && ball.y <= 280) {
