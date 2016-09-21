@@ -40,8 +40,11 @@
 			var faceNum = 0;
 			
 			//Load audio
-			var audio = new Audio();
-			audio.src = "ouch.mp3";
+			var ouchAudio = new Audio(),
+			backgroundAudio = new Audio();
+			ouchAudio.src = "ouch.mp3";
+			backgroundAudio.src = "Megaman-wily-stage-1-2.mp3";
+			backgroundAudio.play();
 			
 			//The ball that we will be drawing on the canvas
 			var ball = {x:canvas.width/2, //the x location of the ball
@@ -187,7 +190,7 @@
 			
 			//Play sound
 			function playSound() {
-				audio.play();
+				ouchAudio.play();
 			}
 			
 			//Draw the scene. Here we simply erase what was previously drawn (e.g., where the ball used to be), then draw it again
