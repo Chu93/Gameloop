@@ -1,8 +1,8 @@
-Gameloop
+# Gameloop
 
-Authors: (Bryan) Bo Cao, Chuyi Liu
+## Authors: (Bryan) Bo Cao, Chuyi Liu
 
-Github Account: BryanBo-Cao, Chu93
+## Github Account: BryanBo-Cao, Chu93
 
 To run, simply open "gameloop_(Bryan)BoCao_ChuyiLiu.html" with Chrome.
 
