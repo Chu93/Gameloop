@@ -19,16 +19,12 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 		document.addEventListener("keydown", keydownEvent, false);	
 		document.addEventListener("keyup", keyupEvent, false);
 		
-		function keydownEvent(e)
-		{
-			if(!e)
-			e = event;
+		function keydownEvent(e) {
+			if(!e) e = event;
 		}
 	
-		function keyupEvent(e)
-		{
-			if(!e)
-			e=event;
+		function keyupEvent(e) {
+			if(!e) e = event;
 		}
 		
 		var TargetFPS = 60; //The FPS we want
@@ -63,7 +59,7 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 								fillColor:"orange", //what color should the ball be
 								strokeColor:"grey", //what color should the outline of the ball be
 								velocity_x:0.1, //how fast the ball will move in the x direction
-								velocity_y:-0.14}; //how fast the ball will move in the y direction
+								velocity_y:0.08}; //how fast the ball will move in the y direction
 			
 			//this original value doesn't matter at all.			
 			var fps=0;
@@ -102,7 +98,6 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 				}
 				
 				draw(delta / timestep);
-			
 			
 				//Display fps with fpsmeter
 				meter.tick();
@@ -161,8 +156,26 @@ Note that Megaman 2 Wily Stage 1 2 background music is used. fpsmeter.js is used
 					changeFace();
 					playSound();
 					updateScore();
-					if (ball.last_x <= 330 || ball.last_x >= 450) ball.velocity_x *= -1;
-					if (ball.last_y <= 160 || ball.last_y >= 280) ball.velocity_y *= -1;
+					if (ball.last_x <= 330) {
+						ball.velocity_x *= -1;
+						ball.last_x = ball.x;
+						ball.x = 330;
+					}
+					if (ball.last_x >= 450) {
+						ball.velocity_x *= -1;
+						ball.last_x = ball.x;
+						ball.x = 450;
+					}
+					if (ball.last_y <= 160) {
+						ball.velocity_y *= -1;
+						ball.last_y = ball.y;
+						ball.y = 160;
+					}
+					if (ball.last_y >= 280) {
+						ball.velocity_y *= -1;
+						ball.last_y = ball.y;
+						ball.y = 280;
+					}
 				}
 				
 			}
