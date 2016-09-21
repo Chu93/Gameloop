@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+	<title>
+		(Bryan)Bo Cao, Chuyi Liu
+	</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 		<script language="javascript" src="jquery.hotkeys.js" type="text/javascript"></script>
 		<script language="javascript" src="key_status.js" type="text/javascript"></script>
@@ -32,8 +35,9 @@
 			var context = canvas.getContext("2d");
 			
 			//load image which will be drawn on the canvas
-			var img = new Image();
-			img.src="funface.jpg";			
+			var imgFace = new Image();
+			imgFace.src = "funface.jpg";
+			var faceNum = 0;
 			
 			//The ball that we will be drawing on the canvas
 			var ball = {x:canvas.width/2, //the x location of the ball
@@ -61,7 +65,6 @@
 			//Define a MsPerUpdate which faster than 60FPS <----> 16''67ms per frame
 			//Be careful not to make it too short ---> Must be greater than update() time.
 			const MsPerUpdate = 12;
-			
 			
 			//Start Time Point
 			var previous = new Date().getTime();
@@ -135,7 +138,7 @@
 				ball.y += ball.velocity_y * delta;
 				
 				if( ball.x < 0 ){
-					ball.velocity_x = ball.velocity_x * -1;
+					ball.velocity_x *= -1;
 				}
 				
 				if( ball.x > canvas.width ){
@@ -148,6 +151,33 @@
 				
 				if( ball.y > canvas.height ){
 					ball.velocity_y *= -1;
+				}
+				
+				//hit the face
+				if (ball.x > 330 && ball.x < 450 && ball.y > 240 && ball.y < 360) {
+					changeFace();
+					if (ball.last_x <= 330 || ball.last_x >= 450) ball.velocity_x *= -1;
+					if (ball.last_y <= 240 || ball.last_y >= 360) ball.velocity_y *= -1;
+				}
+				
+			}
+			
+			//Change img face
+			function changeFace() {
+				switch (faceNum) {
+					case 0:
+						imgFace.src = "cryface.png";
+						faceNum = 1;
+						break;
+					case 1:
+						imgFace.src = "cryface2.png";
+						alert("ha");
+						faceNum = 2;
+						break;
+					case 2:
+						imgFace.src = "funface.jpg";
+						faceNum = 0;
+						break;
 				}
 			}
 			
@@ -170,9 +200,7 @@
 				//context.closePath();
 				
 				//draw the target image
-				context.drawImage(img,175,145);
-				
-				context.fillText("FPS: " + fps, 10, 10);
+				context.drawImage(imgFace,330,240,120,120);
 			}
 		
 		});
@@ -182,12 +210,13 @@
 	
 	<body>	
 	<div>
-		
-		<canvas id="canvas" width="640" 
-		height="540" style="border:1px solid #000;">
-		 Your browser does not support the canvas element.
-
-		 </canvas>
+		<canvas id="canvas" width="800" 
+		height="640" style="border:1px solid #000;">
+		Your browser does not support the canvas element.
+		</canvas>
+		<div>
+			<h3>CSCI-7000 Intro to Virtual Reality Assignment 2 Authors: (Bryan)Bo Cao, Chuyi Liu</h3>
+		</div> 
 	</div>
 	</body>
 	
